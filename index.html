@@ -59,8 +59,8 @@ button,select,input[type="text"],input[type="email"]{min-height:44px}
 .topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .topbar-in{max-width:1240px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-height:44px}
-.brand-mark{width:40px;height:40px;border-radius:11px;background:var(--navy);color:#f7f2e7;display:grid;place-items:center;font-weight:900;font-size:14px;letter-spacing:0;flex:none;padding:0 2px}
-@media(prefers-color-scheme:dark){.brand-mark{background:var(--amber);color:#0b1e2e}}
+.brand-mark{width:40px;height:40px;border-radius:11px;flex:none;display:block;line-height:0}
+.brand-mark svg{width:100%;height:100%;display:block}
 .brand b{display:block;font-size:15px;line-height:1.05;letter-spacing:-.01em}
 .brand span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .mainnav{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
@@ -249,7 +249,7 @@ p{text-wrap:pretty}
 /* Cabecera: sombra al desplazar y navegación más nítida */
 .topbar{transition:box-shadow .25s ease}
 .topbar.scrolled{box-shadow:0 10px 30px rgba(11,30,46,.12)}
-.brand-mark{box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), var(--shadow-sm)}
+.brand-mark{box-shadow:var(--shadow-sm)}
 .mainnav a{transition:background .18s ease,color .18s ease}
 .langtoggle{box-shadow:var(--shadow-sm)}
 .langtoggle button{transition:background .18s ease,color .18s ease}
@@ -816,7 +816,8 @@ h1 .serif::after{content:"";position:absolute;left:2px;right:2px;bottom:6px;heig
 @keyframes veilMarkIn{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:none}}
 #pageVeil.veil-cover .veil-badge{animation:veilPop .55s cubic-bezier(.34,1.56,.64,1) .14s both}
 @keyframes veilPop{from{opacity:0;transform:scale(.65) rotate(-8deg)}to{opacity:1;transform:none}}
-.veil-badge{width:52px;height:52px;border-radius:14px;background:#f5b942;color:#0b1e2e;display:grid;place-items:center;font-family:"Archivo",sans-serif;font-weight:900;font-size:17px;letter-spacing:0;box-shadow:0 14px 30px rgba(0,0,0,.3)}
+.veil-badge{width:52px;height:52px;border-radius:14px;display:block;line-height:0;box-shadow:0 14px 30px rgba(0,0,0,.3)}
+.veil-badge svg{width:100%;height:100%;display:block}
 /* La vista nueva se asienta con un leve desplazamiento y escala */
 .view.active.view-enter{animation:viewSettle .62s cubic-bezier(.22,1,.36,1) both}
 @keyframes viewSettle{from{opacity:.9;transform:translateY(16px) scale(.996)}to{opacity:1;transform:none}}
@@ -854,12 +855,12 @@ h1 .serif::after{content:"";position:absolute;left:2px;right:2px;bottom:6px;heig
 <div id="scrollProgress" aria-hidden="true"></div>
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 <div id="cursorRing" aria-hidden="true"></div>
-<div id="pageVeil" aria-hidden="true"><div class="veil-layer" aria-hidden="true"></div><div class="veil-mark"><span class="veil-badge">S·D</span><span>Santiago Andrés Díaz</span></div></div>
+<div id="pageVeil" aria-hidden="true"><div class="veil-layer" aria-hidden="true"></div><div class="veil-mark"><span class="veil-badge"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><clipPath id="sdClipV"><rect width="48" height="48" rx="12"/></clipPath></defs><g clip-path="url(#sdClipV)"><rect width="48" height="48" fill="#f8f3e8"/><polygon points="0,15.5 15.5,0 48,32.5 32.5,48" fill="#79b4e2"/></g><text x="24" y="30" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-size="13.5" font-weight="900" letter-spacing="-.5" fill="#0b1e2e" stroke="rgba(248,243,232,.9)" stroke-width=".9" paint-order="stroke">SAD</text><rect x="1" y="1" width="46" height="46" rx="11" fill="none" stroke="#0b1e2e" stroke-opacity=".3" stroke-width="2"/></svg></span><span>Santiago Andrés Díaz</span></div></div>
 
 <header class="topbar">
   <div class="topbar-in">
     <a class="brand" href="#/" data-nav>
-      <span class="brand-mark">S·D</span>
+      <span class="brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><defs><clipPath id="sdClipH"><rect width="48" height="48" rx="12"/></clipPath></defs><g clip-path="url(#sdClipH)"><rect width="48" height="48" fill="#f8f3e8"/><polygon points="0,15.5 15.5,0 48,32.5 32.5,48" fill="#79b4e2"/></g><text x="24" y="30" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-size="13.5" font-weight="900" letter-spacing="-.5" fill="#0b1e2e" stroke="rgba(248,243,232,.9)" stroke-width=".9" paint-order="stroke">SAD</text><rect x="1" y="1" width="46" height="46" rx="11" fill="none" stroke="#0b1e2e" stroke-opacity=".3" stroke-width="2"/></svg></span>
       <span><b>Santiago Andrés Díaz</b><span data-i18n="brandSub">Desarrollos Web</span></span>
     </a>
     <nav class="mainnav" aria-label="Principal">
