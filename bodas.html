@@ -25,14 +25,19 @@
       tras «El problema», texto literal sin tocar, principios como
       compromisos numerados; ninguna característica nueva, solo declaración.
       Las 4 lentes lo aprueban sin cambios de fondo.
-      Sello SAD (pasada del enlace-espectáculo): puerta fija arriba a la
-      izquierda con el sello oficial (crema, banda celeste diagonal, SAD en
-      azul noche); al hover/foco la banda barre, el monograma se asienta con
-      micro-resorte y se despliega la etiqueta; al pulsar, el diafragma se
-      cierra como obturador (620 ms, láminas legibles, nunca un fundido)
-      antes de navegar a la principal. Sin JS o con reduced-motion, el
-      enlace navega normal; en móvil el sello va solo (46 px) y no tapa ni
-      el titular ni la lectura de apertura. Las 4 lentes lo aprueban.
+      Vuelta a la principal (pasada de integración): cápsula oscura y
+      discreta en la esquina superior izquierda, en la piel de esta página
+      (negro semisólido, borde hueso tenue, píldora de ~36 px, opacidad
+      atenuada en reposo). Dentro, el sello SAD en miniatura (24 px) como
+      invitado — nunca el botón entero — y el texto «← Principal». Al
+      hover/foco la cápsula se afirma sin crecer: la banda celeste del
+      mini-sello barre, la flecha se enciende en ámbar tenue y la placa con
+      el nombre completo cuelga DEBAJO con fondo sólido, sin pisar la línea
+      del hero. Al pulsar, el diafragma se cierra como obturador (620 ms,
+      láminas legibles, nunca un fundido) antes de navegar. Sin JS o con
+      reduced-motion, el enlace navega normal; en móvil la cápsula va
+      compacta (mini-sello + flecha), sin placa. Las 4 lentes lo aprueban,
+      con la del usuario escéptico mandando: en reposo apenas se nota.
     -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -77,23 +82,27 @@
       .apertura-lectura .f{color:var(--hueso);font-size:.95rem;letter-spacing:.08em}
       .apertura-lectura .punto{width:7px;height:7px;border-radius:50%;background:var(--ambar)}
 
-      /* ---------- sello SAD: puerta de vuelta a la principal ---------- */
+      /* ---------- vuelta a la principal: cápsula discreta con mini-sello ---------- */
       .sello{
         position:fixed;top:1rem;left:1rem;z-index:50;
-        display:flex;align-items:center;gap:.85rem;text-decoration:none;
+        display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;
+        height:36px;padding:5px .8rem 5px 5px;border-radius:999px;
+        background:rgba(11,13,14,.78);border:1px solid rgba(236,231,219,.18);
+        box-shadow:0 8px 22px rgba(0,0,0,.45);
+        -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+        opacity:.75;
+        transition:opacity .35s ease,border-color .35s ease,background .35s ease;
         -webkit-tap-highlight-color:transparent;
       }
+      .sello:hover,.sello:focus-visible{
+        opacity:1;background:rgba(11,13,14,.94);border-color:rgba(236,231,219,.38);
+      }
+      .sello:active{opacity:1}
       .sello-marca{
-        display:block;width:56px;height:56px;flex:none;border-radius:14px;
-        box-shadow:0 12px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.45);
-        transition:transform .5s cubic-bezier(.34,1.6,.5,1),box-shadow .45s ease;
+        display:block;width:24px;height:24px;flex:none;border-radius:7px;overflow:hidden;
+        box-shadow:0 2px 6px rgba(0,0,0,.4);
       }
       .sello-marca svg{display:block;width:100%;height:100%}
-      .sello:hover .sello-marca,.sello:focus-visible .sello-marca{
-        transform:translateY(-1px) scale(1.045) rotate(-1deg);
-        box-shadow:0 18px 42px rgba(0,0,0,.65),0 4px 12px rgba(0,0,0,.5);
-      }
-      .sello:active .sello-marca{transform:scale(.95)}
       .sello:hover .sello-banda,.sello:focus-visible .sello-banda{animation:barrido .8s var(--ease) both}
       @keyframes barrido{
         0%{transform:translate(-11px,-5px)}
@@ -107,15 +116,24 @@
         transition:transform .55s cubic-bezier(.34,1.9,.5,1);
       }
       .sello:hover .sello-mono,.sello:focus-visible .sello-mono{transform:scale(1.08) rotate(-1.6deg)}
+      .sello-texto{
+        display:inline-flex;align-items:center;gap:.45rem;
+        font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+        color:var(--hueso);white-space:nowrap;line-height:1;
+      }
+      .sello-flecha{color:var(--hueso-tenue);transition:color .3s ease}
+      .sello:hover .sello-flecha,.sello:focus-visible .sello-flecha{color:var(--ambar)}
       .sello-etiqueta{
+        position:absolute;top:calc(100% + .55rem);left:0;
         font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
         color:var(--hueso);white-space:nowrap;
-        background:rgba(5,6,7,.55);border:1px solid var(--linea);
-        padding:.5rem .75rem;border-radius:3px;
-        opacity:0;transform:translateX(-10px);pointer-events:none;
-        transition:opacity .4s ease,transform .55s var(--ease);
+        background:#0b0d0e;border:1px solid rgba(236,231,219,.28);
+        box-shadow:0 14px 32px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.5);
+        padding:.6rem .8rem;border-radius:4px;
+        opacity:0;transform:translateY(-6px);pointer-events:none;
+        transition:opacity .35s ease,transform .45s var(--ease);
       }
-      .sello:hover .sello-etiqueta,.sello:focus-visible .sello-etiqueta{opacity:1;transform:translateX(0)}
+      .sello:hover .sello-etiqueta,.sello:focus-visible .sello-etiqueta{opacity:1;transform:translateY(0)}
       @media (hover:none),(max-width:720px){.sello-etiqueta{display:none}}
 
       /* ---------- iris de salida: el obturador al volver ---------- */
@@ -166,7 +184,7 @@
         position:absolute;top:0;left:0;right:0;
         display:flex;justify-content:space-between;align-items:center;gap:1rem;
         padding:1.3rem clamp(1.25rem,5vw,3.5rem);
-        padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 4.35rem);
+        padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 9.4rem);
         font-size:.72rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;
       }
       .hero-tope .marca-nombre{display:flex;align-items:center;gap:.7rem}
@@ -419,9 +437,10 @@
       .creditos{flex-basis:100%;font-size:.72rem;letter-spacing:.06em;color:#d3ccbd}
 
       @media (max-width:640px){
-        .sello{top:.8rem;left:.8rem}
-        .sello-marca{width:46px;height:46px;border-radius:12px}
-        .hero-tope{font-size:.62rem;letter-spacing:.22em;padding-top:1.1rem;padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 3.55rem)}
+        .sello{top:.8rem;left:.8rem;height:34px;padding:5px .6rem 5px 5px}
+        .sello-marca{width:22px;height:22px;border-radius:6px}
+        .sello-palabra{display:none}
+        .hero-tope{font-size:.62rem;letter-spacing:.22em;padding-top:1.1rem;padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 3.4rem)}
         .hero-pie{flex-direction:column;align-items:flex-start;gap:.7rem}
         .desliza .hilo{height:1.5rem}
         .apertura-lectura{letter-spacing:.2em}
@@ -436,9 +455,10 @@
   <body>
     <div class="progreso" id="progreso" aria-hidden="true"></div>
 
-    <!-- Sello SAD: vuelta a la página principal. Al pasar por encima, la
-         banda gallega barre y se despliega la etiqueta; al pulsarlo, el
-         diafragma se cierra como un obturador antes de navegar. -->
+    <!-- Vuelta a la principal: cápsula oscura discreta con el sello SAD en
+         miniatura dentro. Al pasar por encima se afirma, la banda gallega
+         barre y la placa con el nombre completo cuelga debajo; al pulsarla,
+         el diafragma se cierra como un obturador antes de navegar. -->
     <a class="sello" id="sello-sad" href="https://santiago-andres-diaz-desarrollos-web.pages.dev/" aria-label="Volver a la página principal de Santiago Andrés Díaz">
       <span class="sello-marca" aria-hidden="true">
         <svg viewBox="0 0 60 60" role="presentation">
@@ -453,6 +473,7 @@
           <rect x="1" y="1" width="58" height="58" rx="13" fill="none" stroke="rgba(11,30,46,.16)"/>
         </svg>
       </span>
+      <span class="sello-texto" aria-hidden="true"><span class="sello-flecha">←</span><span class="sello-palabra">Principal</span></span>
       <span class="sello-etiqueta" aria-hidden="true">← Santiago Andrés Díaz · Desarrollos Web</span>
     </a>
 
