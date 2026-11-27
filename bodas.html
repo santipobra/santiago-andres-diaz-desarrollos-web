@@ -25,6 +25,14 @@
       tras «El problema», texto literal sin tocar, principios como
       compromisos numerados; ninguna característica nueva, solo declaración.
       Las 4 lentes lo aprueban sin cambios de fondo.
+      Sello SAD (pasada del enlace-espectáculo): puerta fija arriba a la
+      izquierda con el sello oficial (crema, banda celeste diagonal, SAD en
+      azul noche); al hover/foco la banda barre, el monograma se asienta con
+      micro-resorte y se despliega la etiqueta; al pulsar, el diafragma se
+      cierra como obturador (620 ms, láminas legibles, nunca un fundido)
+      antes de navegar a la principal. Sin JS o con reduced-motion, el
+      enlace navega normal; en móvil el sello va solo (46 px) y no tapa ni
+      el titular ni la lectura de apertura. Las 4 lentes lo aprueban.
     -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,6 +77,56 @@
       .apertura-lectura .f{color:var(--hueso);font-size:.95rem;letter-spacing:.08em}
       .apertura-lectura .punto{width:7px;height:7px;border-radius:50%;background:var(--ambar)}
 
+      /* ---------- sello SAD: puerta de vuelta a la principal ---------- */
+      .sello{
+        position:fixed;top:1rem;left:1rem;z-index:50;
+        display:flex;align-items:center;gap:.85rem;text-decoration:none;
+        -webkit-tap-highlight-color:transparent;
+      }
+      .sello-marca{
+        display:block;width:56px;height:56px;flex:none;border-radius:14px;
+        box-shadow:0 12px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.45);
+        transition:transform .5s cubic-bezier(.34,1.6,.5,1),box-shadow .45s ease;
+      }
+      .sello-marca svg{display:block;width:100%;height:100%}
+      .sello:hover .sello-marca,.sello:focus-visible .sello-marca{
+        transform:translateY(-1px) scale(1.045) rotate(-1deg);
+        box-shadow:0 18px 42px rgba(0,0,0,.65),0 4px 12px rgba(0,0,0,.5);
+      }
+      .sello:active .sello-marca{transform:scale(.95)}
+      .sello:hover .sello-banda,.sello:focus-visible .sello-banda{animation:barrido .8s var(--ease) both}
+      @keyframes barrido{
+        0%{transform:translate(-11px,-5px)}
+        55%{transform:translate(1.6px,.7px)}
+        100%{transform:translate(0,0)}
+      }
+      .sello-mono{
+        font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:.4px;
+        fill:#0b1e2e;paint-order:stroke;stroke:#f8f3e8;stroke-width:3.5px;stroke-linejoin:round;
+        transform-box:fill-box;transform-origin:center;
+        transition:transform .55s cubic-bezier(.34,1.9,.5,1);
+      }
+      .sello:hover .sello-mono,.sello:focus-visible .sello-mono{transform:scale(1.08) rotate(-1.6deg)}
+      .sello-etiqueta{
+        font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+        color:var(--hueso);white-space:nowrap;
+        background:rgba(5,6,7,.55);border:1px solid var(--linea);
+        padding:.5rem .75rem;border-radius:3px;
+        opacity:0;transform:translateX(-10px);pointer-events:none;
+        transition:opacity .4s ease,transform .55s var(--ease);
+      }
+      .sello:hover .sello-etiqueta,.sello:focus-visible .sello-etiqueta{opacity:1;transform:translateX(0)}
+      @media (hover:none),(max-width:720px){.sello-etiqueta{display:none}}
+
+      /* ---------- iris de salida: el obturador al volver ---------- */
+      .iris-salida{
+        position:fixed;inset:0;z-index:200;display:grid;place-items:center;pointer-events:none;
+      }
+      .iris-salida[hidden]{display:none}
+      .iris-salida.activa{pointer-events:auto}
+      .iris-salida svg{width:150vmax;height:150vmax;flex:none;overflow:visible}
+      .iris-salida .blade-salida{fill:#07090a;stroke:rgba(236,231,219,.38);stroke-width:.8}
+
       /* ---------- el diafragma (motivo firma) ---------- */
       .diafragma{
         position:fixed;top:50%;left:calc(50% + 38rem);z-index:0;
@@ -108,6 +166,7 @@
         position:absolute;top:0;left:0;right:0;
         display:flex;justify-content:space-between;align-items:center;gap:1rem;
         padding:1.3rem clamp(1.25rem,5vw,3.5rem);
+        padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 4.35rem);
         font-size:.72rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;
       }
       .hero-tope .marca-nombre{display:flex;align-items:center;gap:.7rem}
@@ -360,7 +419,9 @@
       .creditos{flex-basis:100%;font-size:.72rem;letter-spacing:.06em;color:#d3ccbd}
 
       @media (max-width:640px){
-        .hero-tope{font-size:.62rem;letter-spacing:.22em;padding-top:1.1rem}
+        .sello{top:.8rem;left:.8rem}
+        .sello-marca{width:46px;height:46px;border-radius:12px}
+        .hero-tope{font-size:.62rem;letter-spacing:.22em;padding-top:1.1rem;padding-left:calc(clamp(1.25rem,5vw,3.5rem) + 3.55rem)}
         .hero-pie{flex-direction:column;align-items:flex-start;gap:.7rem}
         .desliza .hilo{height:1.5rem}
         .apertura-lectura{letter-spacing:.2em}
@@ -374,6 +435,26 @@
   </head>
   <body>
     <div class="progreso" id="progreso" aria-hidden="true"></div>
+
+    <!-- Sello SAD: vuelta a la página principal. Al pasar por encima, la
+         banda gallega barre y se despliega la etiqueta; al pulsarlo, el
+         diafragma se cierra como un obturador antes de navegar. -->
+    <a class="sello" id="sello-sad" href="https://santiago-andres-diaz-desarrollos-web.pages.dev/" aria-label="Volver a la página principal de Santiago Andrés Díaz">
+      <span class="sello-marca" aria-hidden="true">
+        <svg viewBox="0 0 60 60" role="presentation">
+          <defs>
+            <clipPath id="sello-clip"><rect x="1" y="1" width="58" height="58" rx="13"/></clipPath>
+          </defs>
+          <rect x="1" y="1" width="58" height="58" rx="13" fill="#f8f3e8"/>
+          <g clip-path="url(#sello-clip)">
+            <g class="sello-banda"><rect x="-16" y="24" width="92" height="12" fill="#79b4e2" transform="rotate(24 30 30)"/></g>
+            <text class="sello-mono" x="30" y="30.5" text-anchor="middle" dominant-baseline="central">SAD</text>
+          </g>
+          <rect x="1" y="1" width="58" height="58" rx="13" fill="none" stroke="rgba(11,30,46,.16)"/>
+        </svg>
+      </span>
+      <span class="sello-etiqueta" aria-hidden="true">← Santiago Andrés Díaz · Desarrollos Web</span>
+    </a>
 
     <!-- Diafragma firma: 9 láminas que se abren y giran con el scroll.
          Estado inicial incrustado (t=0.15): sin JS se queda como motivo fijo. -->
@@ -585,6 +666,19 @@
       </footer>
     </main>
 
+    <!-- Iris de salida: 9 láminas que cierran la pantalla entera como un
+         obturador al volver a la principal. Oculto siempre; sin JS nunca
+         aparece y el enlace del sello navega de forma normal. -->
+    <div class="iris-salida" id="iris-salida" hidden aria-hidden="true">
+      <svg viewBox="0 0 220 220" role="presentation">
+        <g id="laminas-salida">
+          <path class="blade-salida"/><path class="blade-salida"/><path class="blade-salida"/>
+          <path class="blade-salida"/><path class="blade-salida"/><path class="blade-salida"/>
+          <path class="blade-salida"/><path class="blade-salida"/><path class="blade-salida"/>
+        </g>
+      </svg>
+    </div>
+
     <script>
       (function () {
         var reducido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -627,6 +721,52 @@
           var h = document.documentElement;
           var max = h.scrollHeight - window.innerHeight;
           return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        }
+
+        /* ---------- Sello SAD: salida con cierre de diafragma ----------
+           Al pulsar el sello, el iris se cierra sobre la pantalla entera
+           (620 ms, láminas legibles) y entonces se navega. Con reduced-motion
+           o con teclas modificadoras no se intercepta nada: el enlace manda. */
+        var sello = document.getElementById("sello-sad");
+        var iris = document.getElementById("iris-salida");
+        var lamSalida = iris ? iris.querySelectorAll(".blade-salida") : [];
+        function hojaSalida(i, u) { /* u: 0 = abierto del todo · 1 = cerrado */
+          var rAp = 102 * (1 - u);
+          var twist = (16 + 40 * u) * Math.PI / 180;
+          var a0 = i * 40 * Math.PI / 180, a1 = (i + 1) * 40 * Math.PI / 180;
+          function p(r, a) { return (110 + r * Math.cos(a)).toFixed(1) + "," + (110 + r * Math.sin(a)).toFixed(1); }
+          return "M" + p(104, a0) + " A104,104 0 0 1 " + p(104, a1) + " L" + p(rAp, a1 + twist) + " L" + p(rAp, a0 + twist) + " Z";
+        }
+        function pintarSalida(u) {
+          for (var i = 0; i < lamSalida.length; i++) lamSalida[i].setAttribute("d", hojaSalida(i, u));
+          var svgS = iris ? iris.querySelector("svg") : null;
+          if (svgS) svgS.style.transform = "rotate(" + (-14 + 34 * u).toFixed(2) + "deg)";
+        }
+        if (sello && iris && lamSalida.length === 9) {
+          pintarSalida(0); /* láminas fuera de pantalla: el iris nace abierto */
+          var cerrando = false;
+          sello.addEventListener("click", function (e) {
+            if (cerrando) { e.preventDefault(); return; }
+            if (reducido || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            cerrando = true;
+            e.preventDefault();
+            var destino = sello.href;
+            iris.hidden = false;
+            iris.classList.add("activa");
+            var t0 = null, DUR = 620;
+            /* Red de seguridad: pase lo que pase, se navega antes de 700 ms. */
+            var respaldo = setTimeout(function () { window.location.href = destino; }, 700);
+            function paso(ts) {
+              if (t0 === null) t0 = ts;
+              var u = Math.min(1, (ts - t0) / DUR);
+              var ez = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+              pintarSalida(ez);
+              if (ez > .97) iris.style.background = "#050607";
+              if (u < 1) { requestAnimationFrame(paso); }
+              else { clearTimeout(respaldo); window.location.href = destino; }
+            }
+            requestAnimationFrame(paso);
+          });
         }
 
         if (reducido) {
