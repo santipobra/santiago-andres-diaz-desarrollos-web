@@ -38,6 +38,18 @@
       reduced-motion, el enlace navega normal; en móvil la cápsula va
       compacta (mini-sello + flecha), sin placa. Las 4 lentes lo aprueban,
       con la del usuario escéptico mandando: en reposo apenas se nota.
+      Pasada del objetivo (28/11/2026, con vídeo del usuario como prueba):
+      el diafragma deja de ser un polígono de alambre y pasa a ser un
+      OBJETIVO — láminas sólidas de metal oscuro que se solapan, con el
+      brillo solo en el borde que forma la apertura, y barrilete grabado
+      con marcas y los números ƒ reales girando unos grados con el scroll.
+      Tamaño gigante en todas las pantallas: clamp(480px, 82vmin, 900px)
+      anclado a la derecha con sangrado deliberado por el borde; máscara
+      lineal que atenúa su tercio izquierdo para que ningún texto pierda
+      legibilidad donde pase por debajo. Extra de la casa: al llegar al
+      final y abrir del todo a ƒ/1.4, un resplandor ámbar suave nace del
+      centro de la apertura y se apaga despacio; el ciclo se reinicia al
+      volver arriba. Reduced-motion: ni resplandor ni giros.
     -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -145,20 +157,59 @@
       .iris-salida svg{width:150vmax;height:150vmax;flex:none;overflow:visible}
       .iris-salida .blade-salida{fill:#07090a;stroke:rgba(236,231,219,.38);stroke-width:.8}
 
-      /* ---------- el diafragma (motivo firma) ---------- */
+      /* ---------- el objetivo (motivo firma) ----------
+         Ya no es un polígono de alambre: es un objetivo. Las láminas son
+         hojas SÓLIDAS de metal oscuro (#0c0e0f, con dos tonos alternos
+         apenas distintos para que el solape se lea) y lo único que brilla
+         es el borde delantero de cada lámina: el lado que forma la
+         apertura. Fuera, el BARRILETE: anillo con marcas grabadas y los
+         números de apertura reales (16 · 11 · 8 · 5.6 · 4 · 2.8 · 2 · 1.4)
+         en hueso tenue, que gira unos pocos grados con el scroll mientras
+         el rotor de láminas gira mucho más.
+         TAMAÑO: gigante en todas las pantallas — diámetro con suelo en
+         píxeles (clamp 480–900 px), anclado a la derecha y sangrando a
+         propósito por el borde, como en el móvil. Sigue detrás del
+         contenido (z-index 0) y lleva una máscara lineal que atenúa su
+         tercio izquierdo, la zona que más se mete bajo el texto, para que
+         ninguna letra pierda legibilidad donde el objetivo pase por debajo. */
       .diafragma{
-        position:fixed;top:50%;left:calc(50% + 38rem);z-index:0;
-        width:min(64vmin,560px);aspect-ratio:1;
+        position:fixed;top:50%;right:calc(-1 * clamp(90px,16vmin,190px));z-index:0;
+        width:clamp(480px,82vmin,900px);aspect-ratio:1;
         transform:translateY(-50%);
-        pointer-events:none;opacity:.72;
+        pointer-events:none;opacity:.88;
+        -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.42) 0%,#000 30%);
+        mask-image:linear-gradient(90deg,rgba(0,0,0,.42) 0%,#000 30%);
       }
-      .diafragma svg{width:100%;height:100%;overflow:visible}
-      .diafragma .blade{fill:rgba(236,231,219,.06);stroke:rgba(236,231,219,.5);stroke-width:.9}
+      .diafragma svg{width:100%;height:100%;overflow:visible;display:block}
+      .diafragma .blade{fill:#0c0e0f;stroke:none}
+      .diafragma #laminas .blade:nth-child(3n+2){fill:#0a0b0c}
+      .diafragma #laminas .blade:nth-child(3n){fill:#0e1011}
+      .diafragma .borde{fill:none;stroke:rgba(236,231,219,.62);stroke-width:1.1;stroke-linecap:round}
       .diafragma .anillo{fill:none;stroke:rgba(236,231,219,.4);stroke-width:1}
       .diafragma .anillo-int{fill:none;stroke:rgba(236,231,219,.18);stroke-width:.7}
+      .diafragma .anillo-ext{fill:none;stroke:rgba(236,231,219,.26);stroke-width:.8}
       .diafragma .marca{stroke:rgba(236,231,219,.4);stroke-width:1.4}
+      .diafragma .numero{
+        font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;
+        fill:rgba(236,231,219,.52);
+      }
+      /* La luz al abrir del todo: resplandor ámbar que nace del centro de
+         la apertura cuando el scroll llega al final (ƒ/1.4) y se apaga
+         despacio. Vive detrás del SVG: solo se ve a través del hueco de
+         la apertura, porque las láminas son opacas. */
+      .resplandor{
+        position:absolute;top:50%;left:50%;width:62%;aspect-ratio:1;
+        transform:translate(-50%,-50%);border-radius:50%;
+        background:radial-gradient(circle,rgba(226,164,88,.55) 0%,rgba(226,164,88,.17) 42%,rgba(226,164,88,0) 68%);
+        opacity:0;transition:opacity 3s ease;pointer-events:none;
+      }
+      .resplandor.luz{opacity:.9;transition-duration:1.6s}
       @media (max-width:640px){
-        .diafragma{left:auto;right:50%;transform:translate(50%,-50%);width:118vmin;opacity:.38}
+        .diafragma{
+          left:auto;right:50%;transform:translate(50%,-50%);width:118vmin;opacity:.38;
+          -webkit-mask-image:none;mask-image:none;
+        }
+        .diafragma .numero{display:none}
       }
 
       main{position:relative;z-index:1}
@@ -477,24 +528,45 @@
       <span class="sello-etiqueta" aria-hidden="true">← Santiago Andrés Díaz · Desarrollos Web</span>
     </a>
 
-    <!-- Diafragma firma: 9 láminas que se abren y giran con el scroll.
+    <!-- El objetivo firma: barrilete grabado con los números de apertura
+         y 9 láminas sólidas que se abren y giran con el scroll; solo brilla
+         el borde que forma la apertura. Al abrir del todo (ƒ/1.4) un
+         resplandor ámbar nace del centro y se apaga despacio.
          Estado inicial incrustado (t=0.15): sin JS se queda como motivo fijo. -->
     <div class="diafragma" id="diafragma" aria-hidden="true">
-      <svg viewBox="0 0 220 220" role="presentation">
-        <circle class="anillo" cx="110" cy="110" r="107"/>
-        <circle class="anillo-int" cx="110" cy="110" r="70"/>
-        <g id="laminas">
-          <path class="blade" d="M214.0,110.0 A104.0,104.0 0 0 1 189.7,176.8 L111.2,131.8 L124.9,125.9 Z"/>
-          <path class="blade" d="M189.7,176.8 A104.0,104.0 0 0 1 128.1,212.4 L96.9,127.4 L111.2,131.8 Z"/>
-          <path class="blade" d="M128.1,212.4 A104.0,104.0 0 0 1 58.0,200.1 L88.8,114.9 L96.9,127.4 Z"/>
-          <path class="blade" d="M58.0,200.1 A104.0,104.0 0 0 1 12.3,145.6 L90.6,100.1 L88.8,114.9 Z"/>
-          <path class="blade" d="M12.3,145.6 A104.0,104.0 0 0 1 12.3,74.4 L101.4,89.9 L90.6,100.1 Z"/>
-          <path class="blade" d="M12.3,74.4 A104.0,104.0 0 0 1 58.0,19.9 L116.3,89.1 L101.4,89.9 Z"/>
-          <path class="blade" d="M58.0,19.9 A104.0,104.0 0 0 1 128.1,7.6 L128.3,98.1 L116.3,89.1 Z"/>
-          <path class="blade" d="M128.1,7.6 A104.0,104.0 0 0 1 189.7,43.2 L131.6,112.6 L128.3,98.1 Z"/>
-          <path class="blade" d="M189.7,43.2 A104.0,104.0 0 0 1 214.0,110.0 L124.9,125.9 L131.6,112.6 Z"/>
+      <div class="resplandor" id="resplandor"></div>
+      <svg viewBox="-35 -35 290 290" role="presentation">
+        <g id="barril">
+          <circle class="anillo-ext" cx="110" cy="110" r="140"/>
+          <circle class="anillo" cx="110" cy="110" r="107"/>
+          <circle class="anillo-int" cx="110" cy="110" r="70"/>
+          <g id="marcas"></g>
+          <g id="numeros"></g>
         </g>
-        <g id="marcas"></g>
+        <g id="rotor">
+          <g id="laminas">
+            <path class="blade" d="M214.0,110.0 A104.0,104.0 0 0 1 189.7,176.8 L111.2,131.8 L124.9,125.9 Z"/>
+            <path class="blade" d="M189.7,176.8 A104.0,104.0 0 0 1 128.1,212.4 L96.9,127.4 L111.2,131.8 Z"/>
+            <path class="blade" d="M128.1,212.4 A104.0,104.0 0 0 1 58.0,200.1 L88.8,114.9 L96.9,127.4 Z"/>
+            <path class="blade" d="M58.0,200.1 A104.0,104.0 0 0 1 12.3,145.6 L90.6,100.1 L88.8,114.9 Z"/>
+            <path class="blade" d="M12.3,145.6 A104.0,104.0 0 0 1 12.3,74.4 L101.4,89.9 L90.6,100.1 Z"/>
+            <path class="blade" d="M12.3,74.4 A104.0,104.0 0 0 1 58.0,19.9 L116.3,89.1 L101.4,89.9 Z"/>
+            <path class="blade" d="M58.0,19.9 A104.0,104.0 0 0 1 128.1,7.6 L128.3,98.1 L116.3,89.1 Z"/>
+            <path class="blade" d="M128.1,7.6 A104.0,104.0 0 0 1 189.7,43.2 L131.6,112.6 L128.3,98.1 Z"/>
+            <path class="blade" d="M189.7,43.2 A104.0,104.0 0 0 1 214.0,110.0 L124.9,125.9 L131.6,112.6 Z"/>
+          </g>
+          <g id="bordes">
+            <path class="borde" d="M124.9,125.9 L111.2,131.8"/>
+            <path class="borde" d="M111.2,131.8 L96.9,127.4"/>
+            <path class="borde" d="M96.9,127.4 L88.8,114.9"/>
+            <path class="borde" d="M88.8,114.9 L90.6,100.1"/>
+            <path class="borde" d="M90.6,100.1 L101.4,89.9"/>
+            <path class="borde" d="M101.4,89.9 L116.3,89.1"/>
+            <path class="borde" d="M116.3,89.1 L128.3,98.1"/>
+            <path class="borde" d="M128.3,98.1 L131.6,112.6"/>
+            <path class="borde" d="M131.6,112.6 L124.9,125.9"/>
+          </g>
+        </g>
       </svg>
     </div>
 
@@ -718,9 +790,25 @@
           marcas.innerHTML = frag;
         }
 
+        /* ---------- Números de apertura grabados en el barrilete ---------- */
+        var numeros = document.getElementById("numeros");
+        if (numeros) {
+          var paradas = ["16", "11", "8", "5.6", "4", "2.8", "2", "1.4"];
+          var fragN = "";
+          for (var k = 0; k < paradas.length; k++) {
+            var deg = -90 + k * 45, ang = deg * Math.PI / 180;
+            var nx = 110 + 131 * Math.cos(ang), ny = 110 + 131 * Math.sin(ang);
+            fragN += '<text class="numero" x="' + nx.toFixed(1) + '" y="' + ny.toFixed(1) +
+              '" transform="rotate(' + (deg + 90) + ' ' + nx.toFixed(1) + ' ' + ny.toFixed(1) +
+              ')" text-anchor="middle" dominant-baseline="central">' + paradas[k] + '</text>';
+          }
+          numeros.innerHTML = fragN;
+        }
+
         /* ---------- Geometría del diafragma ---------- */
         var N = 9, C = 110, R = 104;
         var laminas = document.querySelectorAll("#laminas .blade");
+        var bordes = document.querySelectorAll("#bordes .borde");
         function hoja(i, t) {
           var rAp = 14 + (66 - 14) * t;
           var twist = (52 + (18 - 52) * t) * Math.PI / 180;
@@ -728,8 +816,20 @@
           function p(r, a) { return (C + r * Math.cos(a)).toFixed(1) + "," + (C + r * Math.sin(a)).toFixed(1); }
           return "M" + p(R, a0) + " A" + R + "," + R + " 0 0 1 " + p(R, a1) + " L" + p(rAp, a1 + twist) + " L" + p(rAp, a0 + twist) + " Z";
         }
+        /* El borde delantero de la lámina: el único trazo que brilla,
+           el segmento entre sus dos vértices de apertura. */
+        function borde(i, t) {
+          var rAp = 14 + (66 - 14) * t;
+          var twist = (52 + (18 - 52) * t) * Math.PI / 180;
+          var a0 = i * 40 * Math.PI / 180, a1 = (i + 1) * 40 * Math.PI / 180;
+          function p(r, a) { return (C + r * Math.cos(a)).toFixed(1) + "," + (C + r * Math.sin(a)).toFixed(1); }
+          return "M" + p(rAp, a0 + twist) + " L" + p(rAp, a1 + twist);
+        }
         function pintarDiafragma(t) {
-          for (var i = 0; i < N; i++) laminas[i].setAttribute("d", hoja(i, t));
+          for (var i = 0; i < N; i++) {
+            laminas[i].setAttribute("d", hoja(i, t));
+            if (bordes[i]) bordes[i].setAttribute("d", borde(i, t));
+          }
         }
 
         var diafragma = document.getElementById("diafragma");
@@ -814,7 +914,11 @@
         setTimeout(revelarTodo, 2600);
         window.addEventListener("beforeprint", revelarTodo);
 
-        /* ---------- Bucle de scroll: diafragma + progreso + parallax ---------- */
+        /* ---------- Bucle de scroll: objetivo + progreso + parallax ---------- */
+        var rotor = document.getElementById("rotor");
+        var barril = document.getElementById("barril");
+        var resplandor = document.getElementById("resplandor");
+        var luzHecha = false, luzTimer = null;
         var objetivo = progresoTotal(), actual = objetivo, ultimoT = -1, ultimoStop = "";
         function bucle() {
           objetivo = progresoTotal();
@@ -824,12 +928,29 @@
           if (Math.abs(actual - ultimoT) > 0.0004) {
             ultimoT = actual;
             pintarDiafragma(actual);
-            if (diafragma) diafragma.style.transform = "";
-            var svg = diafragma ? diafragma.querySelector("svg") : null;
-            if (svg) svg.style.transform = "rotate(" + (actual * 130).toFixed(2) + "deg)";
+            /* El rotor de láminas gira con el scroll; el barrilete solo
+               acompaña con un giro leve, como el anillo de un objetivo. */
+            if (rotor) rotor.setAttribute("transform", "rotate(" + (actual * 130).toFixed(2) + " 110 110)");
+            if (barril) barril.setAttribute("transform", "rotate(" + (-10 + actual * 22).toFixed(2) + " 110 110)");
             if (progreso) progreso.style.transform = "scaleX(" + actual.toFixed(4) + ")";
             var idx = Math.min(stops.length - 1, Math.floor(actual * stops.length));
             if (fstop && stops[idx] !== ultimoStop) { ultimoStop = stops[idx]; fstop.textContent = stops[idx]; }
+          }
+
+          /* La luz al abrir del todo: al llegar al final (ƒ/1.4) un
+             resplandor ámbar nace del centro de la apertura y se apaga
+             despacio. Una sola vez por ciclo: si se vuelve arriba, se
+             reinicia y podrá nacer de nuevo al bajar. */
+          if (resplandor) {
+            if (objetivo > 0.995 && !luzHecha) {
+              luzHecha = true;
+              resplandor.classList.add("luz");
+              luzTimer = setTimeout(function () { resplandor.classList.remove("luz"); }, 2400);
+            } else if (objetivo < 0.85 && luzHecha) {
+              luzHecha = false;
+              if (luzTimer) { clearTimeout(luzTimer); luzTimer = null; }
+              resplandor.classList.remove("luz");
+            }
           }
 
           var vh = window.innerHeight;
